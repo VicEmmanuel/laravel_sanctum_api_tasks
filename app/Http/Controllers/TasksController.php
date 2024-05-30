@@ -22,10 +22,13 @@ class TasksController extends Controller
     {
 
         $task  = TasksResource::collection(
+            // Retrieve tasks belonging to the authenticated user
             Task::where("user_id", Auth::user()->id)->get()
         );
         return $this->success(
-            $task,'Fetched My Tasks',);
+            $task,
+            'Fetched My Tasks',
+        );
     }
 
     ///Get All Tasks
@@ -38,8 +41,8 @@ class TasksController extends Controller
         return $this->success(
             $task,
 
-         'All Task Fetched',);
-
+            'All Task Fetched',
+        );
     }
 
     ///Get Others Task
@@ -47,7 +50,7 @@ class TasksController extends Controller
     {
         // Check if the user is authenticated
         if (!Auth::check()) {
-            return$this->error('', 'User is unauthorized', 401);
+            return $this->error('', 'User is unauthorized', 401);
         }
 
         // Retrieve all tasks that do not belong to the authenticated user

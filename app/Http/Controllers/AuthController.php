@@ -31,19 +31,23 @@ class AuthController extends Controller
     }
 
 
-    public function register(StoreUserRequest $request){
-        $request->validated($request->all());
-        $user = User::create([
-        'name'=> $request->name,
-        'email'=> $request->email,
-        'password'=> Hash::make($request->password),
-        // 'password_confirmation' => Hash::make($request->password)
+    public function register(StoreUserRequest $request)
+    {
+        $request->validated();
 
-        ]);
-        return $this->success([
-            'user' => $user,
-            // 'token' => $user->createToken('API Token of' . $user->name)->plainTextToken
-        ], 'Account created successfully');
+        try {
+            $user = User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
+            ]);
+
+            return $this->success([
+                'user' => $user,
+            ], 'Account created successfully');
+        } catch (\Exception $e) {
+            return $this->error([], 'Registration failed', 500);
+        }
     }
 
     public function logout(){
